@@ -44,7 +44,7 @@ export const MainContent = () => {
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center p-4'>
+    <div className='min-h-screen w-full flex items-center justify-center p-4'>
       <div className='bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8'>
 
         <div className='w-full md:w-2/3'>

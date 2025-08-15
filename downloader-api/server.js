@@ -16,9 +16,6 @@ app.use(morgan('dev'))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/view-download', 'dist')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/view-download', 'dist', 'index.html'));
-  });
 } 
 
 app.use('/api/v1', router) // Use the router for API endpoints 

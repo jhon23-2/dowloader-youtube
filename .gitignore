@@ -1,22 +1,4 @@
-node_modules/
-.DS_Store
-.env
-dist/
-coverage/
-build/
-.vscode/
-.idea/
-*.log
-*.tmp
-*.bak
-*.swp
-*.cache
-*.pid
-*.orig
+/client/view-download/node_modules
+/donloader-api/node_modules
 
-*.sublime-workspace
-*.sublime-project
-*.vscode-test
-*.eslintcache
-
-*.tsbuildinfo
+.gitignore
