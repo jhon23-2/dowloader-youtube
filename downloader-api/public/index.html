@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Downloader - Download Videos & Audio</title>
+  <meta name="description"
+    content="Download YouTube videos and audio files in MP4 or MP3 format quickly and for free using a simple URL.">
+  <meta name="keywords"
+    content="youtube downloader, video downloader, audio downloader, mp4 downloader, mp3 converter, free youtube downloader">
+  <meta name="author" content="Jhonattan Almanza (JDEV)">
+
+  <meta property="og:title" content="YouTube Downloader - Free Video & Audio Converter">
+  <meta property="og:description"
+    content="Download your favorite YouTube videos and songs for free. Simple, fast, and easy to use.">
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+  <header class="bg-gray-800 text-white p-4 text-center">
+    <a href="https://github.com/jhon23-2/dowload-youtube" target="_blank"
+      class="inline-block transition-transform duration-200 hover:scale-110">
+      <i class="fa fa-github" style="font-size:36px"></i>
+    </a>
+  </header>
+
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div
+      class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8">
+
+      <div class="w-full md:w-2/3">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">YouTube Downloader</h1>
+        <p class="text-center text-gray-600 mb-8">Enter a YouTube URL to download a video or audio file.</p>
+
+        <form id="downloadForm" class="flex flex-col space-y-4">
+          <div>
+            <label for="url" class="block text-sm font-medium text-gray-700">YouTube URL</label>
+            <input type="text" id="url" name="url" placeholder="e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              required
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+
+          <div>
+            <label for="format" class="block text-sm font-medium text-gray-700">Select Format</label>
+            <select id="format" name="format"
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <option value="video">Video (MP4)</option>
+              <option value="audio">Audio (MP3)</option>
+            </select>
+          </div>
+
+          <button type="submit" id="submitBtn"
+            class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white font-semibold bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors duration-200">
+            Get
+          </button>
+
+          <div id="loading" class="hidden flex items-center justify-center space-x-2 text-gray-600 mt-4">
+            <div class="w-5 h-5 border-4 border-gray-300 rounded-full spinner"></div>
+            <span>Processing... Please wait.</span>
+          </div>
+
+        </form>
+
+        <div id="message" class="mt-4 text-center text-sm font-medium"></div>
+
+      </div>
+
+      <aside class="w-full md:w-1/3 p-6 bg-gray-50 rounded-lg border border-gray-200">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Video Information</h2>
+        <div id="videoInfo" class="space-y-4 text-gray-700">
+          <div class="text-center text-gray-500">Enter a URL and click "Download" to see information here.</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+
+  <footer class="bg-gray-800 text-gray-400 py-4 text-center">
+    <p>&copy; 2025 Jhonattan (JDEV). All rights reserved.</p>
+    <p>Contact: <a href="mailto:jhoalmanza52@gmail.com"
+        class="text-teal-400 hover:text-teal-300">jhoalmanza52@gmail.com</a></p>
+  </footer>
+  <script>
+    const downloadForm = document.getElementById('downloadForm');
+    const urlInput = document.getElementById('url');
+    const formatSelect = document.getElementById('format');
+    const submitBtn = document.getElementById('submitBtn');
+    const videoInfoDiv = document.getElementById('videoInfo');
+    const loadingDiv = document.getElementById('loading');
+    const messageDiv = document.getElementById('message');
+
+    downloadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const youtubeUrl = urlInput.value;
+      const format = formatSelect.value;
+
+      // Basic URL validation
+      if (!youtubeUrl.includes('youtube.com') && !youtubeUrl.includes('youtu.be')) {
+        messageDiv.textContent = 'Please enter a valid YouTube URL.';
+        messageDiv.className = 'mt-4 text-center text-sm font-medium text-red-500';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      loadingDiv.classList.remove('hidden');
+      messageDiv.textContent = '';
+      videoInfoDiv.innerHTML = '<div class="text-center text-gray-500">Fetching video information...</div>';
+
+      try {
+        // Dynamically get the base URL for the current host
+        const baseUrl = window.location.origin;
+
+        const response = await fetch(`${baseUrl}/api/v1/info`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: youtubeUrl, format: format })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server returned status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        // Populate the info section
+        videoInfoDiv.innerHTML = `
+                    <div class="aspect-w-16 aspect-h-9 mb-4">
+                        <iframe src="${data.embed['iframeUrl']}" 
+                                class="w-full h-64 md:h-48 rounded-md shadow-sm"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800">${data.title}</h3>
+                    <p class="text-sm text-gray-600 mb-2">Channel: ${data.channel}</p>
+                    <p class="text-sm text-gray-600 mb-2">Duration: ${data.duration}</p>
+                    <p class="text-sm text-gray-600 mb-4">Size: ${data.fileSize}</p>
+
+                    <a href="${data.downloadUrl}" target="_blank"
+                       class="mt-4 block text-center py-2 px-4 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-md transition-colors duration-200">
+                        Start Download
+                    </a>
+                `;
+
+        messageDiv.textContent = 'Video information loaded. Click "Start Download" to get your file.';
+        messageDiv.className = 'mt-4 text-center text-sm font-medium text-green-500';
+
+      } catch (error) {
+        messageDiv.textContent = `An error occurred: ${error.message}. Please try again.`;
+        messageDiv.className = 'mt-4 text-center text-sm font-medium text-red-500';
+        videoInfoDiv.innerHTML = '<div class="text-center text-gray-500">Failed to fetch video information.</div>';
+      } finally {
+        loadingDiv.classList.add('hidden');
+        submitBtn.disabled = false;
+      }
+    });
+
+  </script>
+</body>
+
+</html>
