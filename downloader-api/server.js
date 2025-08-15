@@ -15,9 +15,12 @@ app.use(express.json());
 app.use(morgan('dev'))
 
 // Serve the static HTML file
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../client/view-download', 'dist', 'index.html')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/view-download', 'dist', 'index.html'));
+});
 
-app.use('/api/v1', router)
+app.use('/api/v1', router) // Use the router for API endpoints 
 app.use((req, res) => {
   return res.status(404).json({
     path: `Path url not found ${req.originalUrl}`

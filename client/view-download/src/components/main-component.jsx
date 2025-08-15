@@ -7,6 +7,7 @@ export const MainContent = () => {
   const [format, setFormat] = useState('video');
   const { data, loading, error, fetchData } = useFetch();
 
+
   const handlerSubmit = async (e) => {
     e.preventDefault()
 
@@ -27,7 +28,9 @@ export const MainContent = () => {
     }
 
 
-    const apiUrl = 'http://localhost:3000/api/v1/info' // Change on production mode 📄 
+    // we goint to set apiUrl to production mode later
+    
+    const apiUrl = window.location.origin + '/api/v1/info'; 
     const body = { url, format }
 
     fetchData(apiUrl, {

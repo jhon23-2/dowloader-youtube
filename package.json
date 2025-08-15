@@ -1,0 +1,21 @@
+{
+  "name": "mern-stack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix client/view-download && npm install --prefix downloader-api && npm run build --prefix client/view-download"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhon23-2/dowloader-youtube.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jhon23-2/dowloader-youtube/issues"
+  },
+  "homepage": "https://github.com/jhon23-2/dowloader-youtube#readme"
+}
