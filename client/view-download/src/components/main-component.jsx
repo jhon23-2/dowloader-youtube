@@ -30,10 +30,7 @@ export const MainContent = () => {
 
     // we goint to set apiUrl to production mode later
     
-    const apiUrl = import.meta.env.NODE_ENV === 'production'
-      ? '/api/v1/info'
-      : 'http://localhost:5000/api/v1/info';
-
+    const apiUrl = '/api/v1/info';
     const body = { url, format }
 
     fetchData(apiUrl, {
@@ -47,7 +44,7 @@ export const MainContent = () => {
   }
 
   return (
-    <div className='min-h-screen w-full flex items-center justify-center p-4'>
+    <div className='min-h-screen flex items-center justify-center p-4'>
       <div className='bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8'>
 
         <div className='w-full md:w-2/3'>
