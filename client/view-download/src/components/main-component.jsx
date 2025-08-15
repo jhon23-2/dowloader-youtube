@@ -30,7 +30,10 @@ export const MainContent = () => {
 
     // we goint to set apiUrl to production mode later
     
-    const apiUrl = window.location.origin + '/api/v1/info'; 
+    const apiUrl = import.meta.env.NODE_ENV === 'production'
+      ? '/api/v1/info'
+      : 'http://localhost:5000/api/v1/info';
+
     const body = { url, format }
 
     fetchData(apiUrl, {
