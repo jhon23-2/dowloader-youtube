@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npm install --prefix client/view-download && npm install --prefix downloader-api && npm run build --prefix client/view-download"
+    "build": "npm install --prefix client/view-download && npm install --prefix downloader-api && npm run build --prefix client/view-download",
+    "start": "npm run start --prefix downloader-api"
   },
   "repository": {
     "type": "git",
